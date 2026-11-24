@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Notepad</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            direction: rtl;
+        }
+
+        .app {
+            width: 90%;
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px #0002;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2563eb;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 350px;
+            padding: 15px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #2563eb;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .save {
+            background: #2563eb;
+        }
+
+        .clear {
+            background: #ef4444;
+        }
+
+        .count {
+            margin-top: 15px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app">
+        <h1>📝 My Notepad</h1>
+
+        <input
+            type="text"
+            id="filename"
+            placeholder="اكتب اسم الملف..."
+            value="my-note"
+        >
+
+        <textarea
+            id="note"
+            placeholder="اكتب ملاحظاتك هنا..."
+        ></textarea>
+
+        <div class="buttons">
+            <button class="save" onclick="saveNote()">
+                💾 حفظ النص
+            </button>
+
+            <button class="clear" onclick="clearNote()">
+                🗑️ مسح النص
+            </button>
+        </div>
+
+        <p class="count">
+            عدد الحروف: <span id="counter">0</span>
+        </p>
+    </div>
+
+    <script>
+        const note = document.getElementById("note");
+        const counter = document.getElementById("counter");
+
+        // حساب عدد الحروف
+        note.addEventListener("input", function () {
+            counter.textContent = note.value.length;
+        });
+
+        // حفظ النص في ملف TXT
+        function saveNote() {
+            const filename =
+                document.getElementById("filename").value || "my-note";
+
+            const blob = new Blob(
+                [note.value],
+                { type: "text/plain;charset=utf-8" }
+            );
+
+            const link = document.createElement("a");
+
+            link.href = URL.createObjectURL(blob);
+            link.download = filename + ".txt";
+
+            link.click();
+
+            URL.revokeObjectURL(link.href);
+        }
+
+        // مسح النص
+        function clearNote() {
+            if (confirm("هل تريد مسح النص؟")) {
+                note.value = "";
+                counter.textContent = "0";
+            }
+        }
+    </script>
+
+</body>
+</html>
